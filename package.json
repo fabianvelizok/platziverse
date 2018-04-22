@@ -1,5 +1,5 @@
 {
-  "name": "platziverse-db",
+  "name": "platziverse",
   "version": "1.0.0",
   "description": "A simple IoT Platform - DB Module",
   "main": "index.js",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "devDependencies": {
     "ava": "^0.24.0",
-    "eslint": "^4.14.0",
+    "eslint": "^4.19.1",
     "sqlite3": "^3.1.13"
   },
   "dependencies": {
@@ -23,5 +23,7 @@
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.28.6"
-  }
+  },
+  "repository": "git@github.com:fabianvelizok/platziverse.git",
+  "private": false
 }

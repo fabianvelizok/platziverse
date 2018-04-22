@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
-const debug = require('debug')('platziverse:db:setup');
-const inquirer = require('inquirer');
-const chalk = require('chalk');
-const db = require('./');
+const debug = require('debug')('platziverse:db:setup')
+const inquirer = require('inquirer')
+const chalk = require('chalk')
+const db = require('./')
 
-const prompt = inquirer.createPromptModule();
+const prompt = inquirer.createPromptModule()
 
 async function setup() {
   const answer = await prompt([
@@ -14,10 +14,10 @@ async function setup() {
       name: 'setup',
       message: 'Are you sure to destroy the database?'
     }
-  ]);
+  ])
 
   if (!answer.setup) {
-    return console.log('nothing happend');
+    return console.log('nothing happend')
   }
 
   const config = {
@@ -29,17 +29,17 @@ async function setup() {
     logging: s => debug(s),
     setup: true,
     operatorsAliases: false,
-  };
+  }
 
-  await db(config).catch(handleFatalError);
-  console.log('Success');
-  process.exit(0);
+  await db(config).catch(handleFatalError)
+  console.log('Success')
+  process.exit(0)
 }
 
 const handleFatalError = (err) => {
-  console.error(`${chalk.red('[fatal error]')} ${err.message}`);
-  console.error(err.stack);
-  process.exit(1);
+  console.error(`${chalk.red('[fatal error]')} ${err.message}`)
+  console.error(err.stack)
+  process.exit(1)
 }
 
-setup();
+setup()

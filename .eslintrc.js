@@ -6,10 +6,6 @@ module.exports = {
     "node": true
   },
   "extends": "eslint:recommended",
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 2017
-  },
   "rules": {
     "indent": [
       "error",
@@ -25,7 +21,10 @@ module.exports = {
     ],
     "semi": [
       "error",
-      "always"
+      "never"
     ]
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   }
 };
