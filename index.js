@@ -1,5 +1,6 @@
 'use strict'
 
+const Sequelize = require('sequelize')
 const setupDatabase = require('./lib/db')
 const setupAgentModel = require('./models/agent')
 const setupMetricModel = require('./models/metric')
@@ -8,7 +9,10 @@ const setupAgent = require('./lib/agent')
 const defaults = require('defaults')
 
 module.exports = async function (config) {
+  const Op = Sequelize.Op
+
   config = defaults(config, {
+    operatorsAliases: Op, // use Sequelize.Op
     dialect: 'sqlite',
     pool: {
       max: 10,

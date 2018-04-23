@@ -11,9 +11,14 @@ let config = {
   logging: function () { }
 }
 
-// Mock single agent and id
+// Mock data
 const id = 1
 const single = Object.assign({}, agentFixtures.single)
+const uuid = 'xxx-xxx-xxx'
+
+const uuidArgs = {
+  where: { uuid }
+}
 
 // Model representations
 let MetricStub = {
@@ -32,9 +37,21 @@ test.beforeEach(async () => {
   // Model: Add findById stub
   AgentStub.findById = sandbox.stub()
   // Hey fake function, when I call you with 'x' argument, you have to return 'y'.
-  AgentStub.findById.withArgs(id).returns(
-    Promise.resolve(agentFixtures.findById(id))
-  )
+  AgentStub.findById
+    .withArgs(id)
+    .returns(Promise.resolve(agentFixtures.findById(id)))
+
+  // Model: Add findOne stub
+  AgentStub.findOne = sandbox.stub()
+  AgentStub.findOne
+    .withArgs(uuidArgs)
+    .returns(Promise.resolve(agentFixtures.findByUuid(uuid)))
+
+  // Model: Add update stub
+  AgentStub.update = sandbox.stub()
+  AgentStub.update
+    .withArgs(single, uuidArgs)
+    .returns(Promise.resolve(agentFixtures.single))
 
   // Rewrite requires
   const setupDatabase = proxyquire('../', {
@@ -66,4 +83,13 @@ test.serial('Setup#findById', async (t) => {
   t.true(AgentStub.findById.calledOnce, 'findById should be called once')
   t.true(AgentStub.findById.calledWith(id), 'findById should be called with right id')
   t.deepEqual(agent, agentFixtures.findById(id), 'Results should be the same')
+})
+
+test.serial('Setup#createOrUpdate - exists', async (t) => {
+  let agent = await db.Agent.createOrUpdate(single)
+
+  t.true(AgentStub.findOne.called, 'findOne should be called')
+  t.true(AgentStub.findOne.calledTwice, 'findOne should be called twice')
+  t.true(AgentStub.update.calledOnce, 'update should be called once')
+  t.deepEqual(agent, single, 'Results should be the same')
 })
