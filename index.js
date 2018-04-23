@@ -3,6 +3,7 @@
 const setupDatabase = require('./lib/db')
 const setupAgentModel = require('./models/agent')
 const setupMetricModel = require('./models/metric')
+const setupAgent = require('./lib/agent')
 
 const defaults = require('defaults')
 
@@ -34,11 +35,11 @@ module.exports = async function (config) {
   AgentModel.hasMany(MetricModel)
   MetricModel.belongsTo(AgentModel)
 
-  const agent = {}
-  const metric = {}
+  const Agent = setupAgent(AgentModel)
+  const Metric = {}
 
   return {
-    agent,
-    metric,
+    Agent,
+    Metric,
   }
 }
