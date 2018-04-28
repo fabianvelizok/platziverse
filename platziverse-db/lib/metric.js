@@ -39,7 +39,7 @@ module.exports = function setupAgent(MetricModel, AgentModel) {
     })
 
     if (agent) {
-      metric.id = agent.id
+      Object.assign(metric, { agentId: agent.id })
       const result = await MetricModel.create(metric)
       return result.toJSON()
     }
