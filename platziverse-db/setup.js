@@ -5,19 +5,22 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 const db = require('./')
 
-const prompt = inquirer.createPromptModule()
-
 async function setup() {
-  const answer = await prompt([
-    {
-      type: 'confirm',
-      name: 'setup',
-      message: 'Are you sure to destroy the database?'
+  const byPass = process.argv.indexOf('yes') !== -1
+  
+  if (!byPass) {
+    const prompt = inquirer.createPromptModule()
+    const answer = await prompt([
+      {
+        type: 'confirm',
+        name: 'setup',
+        message: 'Are you sure to destroy the database?'
+      }
+    ])
+  
+    if (!answer.setup) {
+      return console.log('Nothing happend.')
     }
-  ])
-
-  if (!answer.setup) {
-    return console.log('nothing happend')
   }
 
   const config = {
