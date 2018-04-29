@@ -28,5 +28,5 @@
     "sequelize": "^4.28.6"
   },
   "repository": "git@github.com:fabianvelizok/platziverse.git",
-  "private": false
+  "private": true
 }

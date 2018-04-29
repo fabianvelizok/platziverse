@@ -1,0 +1,15 @@
+{
+  "name": "platziverse-mqtt",
+  "version": "1.0.0",
+  "description": "A simple IoT platform - MQTT Server",
+  "main": "server.js",
+  "scripts": {},
+  "author": "Fabián Veliz <velizfabianhoracio@gmail.com> (https://twitter.com/fabianvelizok)",
+  "license": "MIT",
+  "repository": "git@github.com:fabianvelizok/platziverse.git",
+  "private": true,
+  "devDependencies": {
+    "nodemon": "^1.17.3",
+    "standard": "^11.0.1"
+  }
+}
