@@ -4,6 +4,7 @@ const debug = require('debug')('platziverse:mqtt')
 const mosca = require('mosca')
 const redis = require('redis')
 const chalk = require('chalk')
+const db = require('platziversedb')
 
 const backend = {
   type: 'redis',
@@ -16,9 +17,47 @@ const settings = {
   backend
 }
 
-const server = new mosca.Server(settings)
+const config = {
+  database: process.env.DB_NAME || 'platziverse',
+  username: process.env.DB_USER || 'platzi',
+  password: process.env.DB_PASS || 'platzi',
+  host: process.env.DB_HOST || 'localhost',
+  dialect: 'postgres',
+  logging: s => debug(s)
+}
 
-server.on('ready', () => {
-  const mqtt = `${chalk.green('[platziverse-mqtt]')}`
-  console.log(`${mqtt} server is running`)
+const server = new mosca.Server(settings)
+const clients = new Map()
+
+let Agent, Metric
+
+server.on('clientConnected', client => {
+  debug(`Client connected: ${client.id}`)
+  clients.set(client.id, null)
 })
+
+server.on('clientDisconnected', client => {
+  debug(`Client Disconnected: ${client.id}`)
+})
+
+server.on('published', (packet, client) => {
+  debug(`Received: ${packet.topic}`)
+})
+
+server.on('ready', async () => {
+  const services = await db(config).catch(handleFatalError)
+  Agent = services.Agent
+  Metric = services.Metric
+  console.log(`${chalk.green('[platziverse-mqtt]')} server is running`)
+})
+
+server.on('error', handleFatalError)
+
+function handleFatalError (err) {
+  console.error(`${chalk.red('[fatal error]')} ${err.message}`)
+  console.error(err.stack)
+  process.exit(1)
+}
+
+process.on('uncaughtException', handleFatalError) 
+process.on('unhandledRejection', handleFatalError)
