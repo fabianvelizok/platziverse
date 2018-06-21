@@ -6,5 +6,11 @@
   "author": "Fabián Veliz <velizfabianhoracio@gmail.com> (https://twitter.com/fabianvelizok)",
   "repository": "git@github.com:fabianvelizok/platziverse.git",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "lint": "standard"
+  },
+  "devDependencies": {
+    "standard": "^11.0.1"
+  }
 }
