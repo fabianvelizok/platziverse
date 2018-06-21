@@ -1,0 +1,10 @@
+{
+  "name": "platziverse-agent",
+  "version": "1.0.0",
+  "description": "A simple IoT platform - Agent",
+  "main": "index.js",
+  "author": "Fabián Veliz <velizfabianhoracio@gmail.com> (https://twitter.com/fabianvelizok)",
+  "repository": "git@github.com:fabianvelizok/platziverse.git",
+  "license": "MIT",
+  "private": true
+}
