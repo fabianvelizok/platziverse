@@ -9,8 +9,11 @@ api.get('/agents', (req, res) => {
   res.send({})
 })
 
-api.get('/agents/:uuid', (req, res) => {
+api.get('/agent/:uuid', (req, res, next) => {
   const { uuid } = req.params
+  if (!uuid) {
+    return next(new Error('[uuid] doesn\'t exist'))
+  }
   res.send({ uuid })
 })
 
