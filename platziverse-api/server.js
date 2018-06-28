@@ -22,15 +22,27 @@ app.use((err, req, res, next) => {
   res.status(500).send({ error: err.message })
 })
 
-server.listen(port, () => {
-  console.log(`${chalk.green('[platziverse-api]')} server listening on port ${port}`)
-})
+/*
+ * > node server.js
+ * console.log(module.parent); // `null`
+ * --------------
+ * > node require('./server')
+ * console.log(module.parent); // `{ ... }`
+ */
 
-function handleFatalError(err) {
-  console.error(`${chalk.red('[fatal error]')} ${err.message}`)
-  console.error(err.stack)
-  process.exit(1)
+if (!module.parent) {
+  server.listen(port, () => {
+    console.log(`${chalk.green('[platziverse-api]')} server listening on port ${port}`)
+  })
+
+  function handleFatalError(err) {
+    console.error(`${chalk.red('[fatal error]')} ${err.message}`)
+    console.error(err.stack)
+    process.exit(1)
+  }
+
+  process.on('uncaughtException', handleFatalError)
+  process.on('unhandledRejection', handleFatalError)
 }
 
-process.on('uncaughtException', handleFatalError)
-process.on('unhandledRejection', handleFatalError)
+module.exports = server
