@@ -1,14 +1,16 @@
 'use strict'
 
-const test = require('ava')
-const sinon = require('sinon')
+const common = require('platziverse-common')
 const proxyquire = require('proxyquire')
-const agentFixtures = require('./fixtures/agent')
+const sinon = require('sinon')
+const test = require('ava')
+
+const agentFixtures = common.tests.fixtures.agent
 
 let db = null
 let sandbox = null
 let config = {
-  logging: function () { }
+  logging: function () {}
 }
 
 // Mock data

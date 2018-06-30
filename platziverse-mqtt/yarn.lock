@@ -3239,7 +3239,10 @@ pkg-dir@^1.0.0:
   dependencies:
     find-up "^1.0.0"
 
-"platziversedb@file:../platziverse-db":
+"platziverse-common@file:../platziverse-common":
+  version "1.0.0"
+
+"platziverse-db@file:../platziverse-db":
   version "1.0.0"
   dependencies:
     chalk "^2.3.0"
@@ -3248,6 +3251,7 @@ pkg-dir@^1.0.0:
     inquirer "^4.0.2"
     pg "^7.4.0"
     pg-hstore "^2.3.2"
+    platziverse-common "file:../../../.cache/yarn/v1/platziverse-common"
     sequelize "^4.28.6"
 
 pluralize@^7.0.0:

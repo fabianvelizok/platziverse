@@ -1,5 +1,5 @@
 {
-  "name": "platziverse",
+  "name": "platziverse-db",
   "version": "1.0.0",
   "description": "A simple IoT Platform - DB Module",
   "main": "index.js",
@@ -25,6 +25,7 @@
     "inquirer": "^4.0.2",
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
+    "platziverse-common": "file:../platziverse-common",
     "sequelize": "^4.28.6"
   },
   "repository": "git@github.com:fabianvelizok/platziverse.git",

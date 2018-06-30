@@ -1,0 +1,10 @@
+{
+  "name": "platziverse-common",
+  "version": "1.0.0",
+  "description": "A simple IoT platform - Common files",
+  "main": "index.js",
+  "author": "Fabián Veliz <velizfabianhoracio@gmail.com> (https://twitter.com/fabianvelizok)",
+  "license": "MIT",
+  "repository": "git@github.com:fabianvelizok/platziverse.git",
+  "private": true
+}

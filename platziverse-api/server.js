@@ -1,14 +1,15 @@
 'use strict'
 
-const http = require('http')
-const express = require('express')
+const asyncify = require('express-asyncify')
 const chalk = require('chalk')
 const debug = require('debug')('platziverse:server')
+const express = require('express')
+const http = require('http')
 
 const api = require('./api')
 
 const port = process.env.PORT || 3000
-const app = express()
+const app = asyncify(express())
 const server = http.createServer(app)
 
 app.use('/api', api)

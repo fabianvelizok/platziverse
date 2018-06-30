@@ -1,9 +1,10 @@
 'use strict'
 
-const debug = require('debug')('platziverse:db:setup')
-const inquirer = require('inquirer')
 const chalk = require('chalk')
 const db = require('./')
+const debug = require('debug')('platziverse:db:setup')
+const inquirer = require('inquirer')
+const common = require('platziverse-common')
 
 async function setup() {
   const byPass = process.argv.indexOf('yes') !== -1
@@ -19,23 +20,18 @@ async function setup() {
     ])
   
     if (!answer.setup) {
-      return console.log('Nothing happend.')
+      return console.log('Nothing happened.')
     }
   }
 
-  const config = {
-    database: process.env.DB_NAME || 'platziverse',
-    username: process.env.DB_USER || 'platzi',
-    password: process.env.DB_PASS || 'platzi',
-    host: process.env.DB_HOST || 'localhost',
-    dialect: 'postgres',
+  const config = Object.assign({}, common.db.config, {
     logging: s => debug(s),
     setup: true,
     operatorsAliases: false,
-  }
+  })
+
 
   await db(config).catch(handleFatalError)
-  console.log('Success')
   process.exit(0)
 }
 

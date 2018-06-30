@@ -19,7 +19,8 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "debug": "^3.1.0",
-    "platziversedb": "file:../platziverse-db", 
+    "platziverse-common": "file:../platziverse-common",
+    "platziverse-db": "file:../platziverse-db",
     "mosca": "^2.8.1",
     "redis": "^2.8.0"
   }

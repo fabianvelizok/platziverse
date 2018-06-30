@@ -1,10 +1,11 @@
 'use strict'
 
+const chalk = require('chalk')
+const common = require('platziverse-common')
+const db = require('platziverse-db')
 const debug = require('debug')('platziverse:mqtt')
 const mosca = require('mosca')
 const redis = require('redis')
-const chalk = require('chalk')
-const db = require('platziversedb')
 const { parsePayload } = require('./utils')
 
 const backend = {
@@ -18,14 +19,9 @@ const settings = {
   backend
 }
 
-const config = {
-  database: process.env.DB_NAME || 'platziverse',
-  username: process.env.DB_USER || 'platzi',
-  password: process.env.DB_PASS || 'platzi',
-  host: process.env.DB_HOST || 'localhost',
-  dialect: 'postgres',
+const config = Object.assign({}, common.db.config, {
   logging: s => debug(s)
-}
+})
 
 const server = new mosca.Server(settings)
 const clients = new Map()

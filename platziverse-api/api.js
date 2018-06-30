@@ -1,11 +1,17 @@
 'use strict'
 
+const asyncify = require('express-asyncify')
+const common = require('platziverse-common')
+const db = require('platziverse-db')
 const debug = require('debug')('platziverse:api:routes')
 const express = require('express')
-const db = require('platziversedb')
 
-const config = require('./config')
-const api = express.Router()
+const config = Object.assign({}, common.db.config, {
+  logging: s => debug(s)
+})
+
+// Add support for async / await on middlewares and routes.
+const api = asyncify(express.Router()) 
 
 let services, Agent, Metric
 
@@ -13,7 +19,7 @@ api.use('*', async (req, res, next) => {
   if (!services) {
     debug('Connecting to database...')
     try {
-      services = await db(config.db)
+      services = await db(config)
     } catch (e) {
       return next(e) // Express error manager
     }

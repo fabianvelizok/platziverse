@@ -1540,6 +1540,10 @@ expand-range@^1.8.1:
   dependencies:
     fill-range "^2.1.0"
 
+express-asyncify@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/express-asyncify/-/express-asyncify-1.0.0.tgz#6194dddd2a30ed1c28649140485384525e8e1c77"
+
 express@^4.16.3:
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
@@ -3271,7 +3275,10 @@ pkg-dir@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-"platziversedb@file:../platziverse-db":
+"platziverse-common@file:../platziverse-common":
+  version "1.0.0"
+
+"platziverse-db@file:../platziverse-db":
   version "1.0.0"
   dependencies:
     chalk "^2.3.0"
@@ -3280,6 +3287,7 @@ pkg-dir@^2.0.0:
     inquirer "^4.0.2"
     pg "^7.4.0"
     pg-hstore "^2.3.2"
+    platziverse-common "file:../../../.cache/yarn/v1/platziverse-common"
     sequelize "^4.28.6"
 
 plur@^2.0.0:
@@ -4299,8 +4307,8 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
 
 uuid@^3.2.1:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.0.tgz#b237147804881d7b86f40a7ff8f590f15c37de32"
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.3"
