@@ -6,8 +6,7 @@ const config = {
   password: process.env.DB_PASS || 'platzi',
   host: process.env.DB_HOST || 'localhost',
   dialect: 'postgres',
-  logging: s => debug(s),
-  setup: true
+  logging: s => debug(s)
 }
 
 module.exports = config
