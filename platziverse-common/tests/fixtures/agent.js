@@ -1,10 +1,5 @@
 'use strict'
 
-Object.prototype.extends = function (params = {}) {
-  const newObj = Object.assign({}, this, params)
-  return newObj
-}
-
 const agent = {
   id: 1,
   uuid: 'xxx-xxx-xxx',
@@ -19,9 +14,9 @@ const agent = {
 
 const agents = [
   agent,
-  agent.extends({ id: 2, uuid: 'yyy-yyy-yyy', connected: false, username: 'test' }),
-  agent.extends({ id: 3, uuid: 'zzz-zzz-zzz' }),
-  agent.extends({ id: 4, uuid: 'xyz-xyz-xyz', username: 'test' }),
+  Object.assign({}, agent, { id: 2, uuid: 'yyy-yyy-yyy', connected: false, username: 'test' }),
+  Object.assign({}, agent, { id: 3, uuid: 'zzz-zzz-zzz' }),
+  Object.assign({}, agent, { id: 4, uuid: 'xyz-xyz-xyz', username: 'test' }),
 ]
 
 module.exports = {
