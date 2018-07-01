@@ -1,14 +1,12 @@
 'use strict'
 
 const asyncify = require('express-asyncify')
-const common = require('platziverse-common')
 const db = require('platziverse-db')
 const debug = require('debug')('platziverse:api:routes')
 const express = require('express')
+const auth = require('express-jwt')
 
-const config = Object.assign({}, common.db.config, {
-  logging: s => debug(s)
-})
+const config = require('./config')
 
 // Add support for async / await on middlewares and routes.
 const api = asyncify(express.Router()) 
@@ -19,7 +17,7 @@ api.use('*', async (req, res, next) => {
   if (!services) {
     debug('Connecting to database...')
     try {
-      services = await db(config)
+      services = await db(config.db)
     } catch (e) {
       return next(e) // Express error manager
     }
@@ -30,12 +28,22 @@ api.use('*', async (req, res, next) => {
   next()
 })
 
-api.get('/agents', async (req, res, next) => {
+api.get('/agents', auth(config.auth), async (req, res, next) => {
   debug('New request to /agents')
+
+  const { user } = req
+
+  if (!user || !user.username) {
+    return next(new Error('Not authorized'))
+  }
   
   let agents = []
   try {
-    agents = await Agent.findConnected()
+    if (user.admin) {
+      agents = await Agent.findConnected()
+    } else {
+      agents = await Agent.findByUsername(user.username)
+    }
   } catch (e) {
     next(e)
   }
