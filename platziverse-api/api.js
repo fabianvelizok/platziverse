@@ -1,10 +1,11 @@
 'use strict'
 
 const asyncify = require('express-asyncify')
+const auth = require('express-jwt')
 const db = require('platziverse-db')
 const debug = require('debug')('platziverse:api:routes')
 const express = require('express')
-const auth = require('express-jwt')
+const guard = require('express-jwt-permissions')()
 
 const config = require('./config')
 
@@ -51,7 +52,7 @@ api.get('/agents', auth(config.auth), async (req, res, next) => {
   res.send(agents)
 })
 
-api.get('/agent/:uuid', async (req, res, next) => {
+api.get('/agent/:uuid', auth(config.auth), guard.check(['metrics:read']), async (req, res, next) => {
   const { uuid } = req.params
 
   debug(`New request to /agent/${uuid}`)
