@@ -5,10 +5,24 @@ const debug = require('debug')('platziverse:web')
 const express = require('express')
 const http = require('http')
 const path = require('path')
+const socket = require('socket.io')
 
 const port = process.env.PORT || 8080
 const app = express()
 const server = http.createServer(app)
+const io = socket(server)
+
+io.on('connect', socket => {
+  debug(`Connected ${socket.id}`)
+
+  socket.on('agent/message', payload => {
+    console.log(payload)
+  })
+
+  setInterval(() => {
+    socket.emit('agent/message', { agent: 'xyz'})
+  }, 5000)
+})
 
 app.use(express.static(path.join(__dirname, 'public')))
 
