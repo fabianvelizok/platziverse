@@ -26,7 +26,7 @@ io.on('connect', socket => {
 })
 
 // Error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   debug(`Error: ${err.message}`)
 
   if (err.message && err.message.match(/not found/)) {
