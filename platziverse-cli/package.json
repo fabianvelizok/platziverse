@@ -1,0 +1,16 @@
+{
+  "name": "platziverse-cli",
+  "description": "A simple IoT platform - CLI",
+  "version": "1.0.0",
+  "bin": "platziverse.js",
+  "author": "Fabián Veliz <velizfabianhoracio@gmail.com> (https://twitter.com/fabianvelizok)",
+  "license": "MIT",
+  "repository": "git@github.com:fabianvelizok/platziverse.git",
+  "scripts": {
+    "lint": "standard"
+  },
+  "private": true,
+  "devDependencies": {
+    "standard": "^11.0.1"
+  }
+}
