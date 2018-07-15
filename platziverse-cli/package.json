@@ -12,5 +12,11 @@
   "private": true,
   "devDependencies": {
     "standard": "^11.0.1"
+  },
+  "dependencies": {
+    "args": "^5.0.0",
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.5",
+    "minimist": "^1.2.0"
   }
 }
