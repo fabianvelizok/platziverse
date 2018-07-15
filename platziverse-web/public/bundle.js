@@ -3,14 +3,17 @@ var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".metrics
 ;(function(){
 'use strict';
 
+var request = require('request-promise-native');
+
 module.exports = {
-  props: ['uuid'],
+  props: ['uuid', 'socket'],
 
   data: function data() {
     return {
       name: null,
       hostname: null,
       connected: false,
+      pid: null,
       showMetrics: false,
       error: null,
       metrics: []
@@ -22,7 +25,67 @@ module.exports = {
 
 
   methods: {
-    initialize: function initialize() {},
+    initialize: async function initialize() {
+      var uuid = this.uuid;
+
+
+      var options = {
+        method: 'GET',
+        url: 'http://localhost:8080/agent/' + uuid,
+        json: true
+      };
+
+      var agent = void 0;
+      try {
+        agent = await request(options);
+      } catch (e) {
+        this.error = e.error.error;
+        return;
+      }
+
+      this.name = agent.name;
+      this.hostname = agent.hostname;
+      this.connected = agent.connected;
+      this.pid = agent.pid;
+
+      this.loadMetrics();
+    },
+    loadMetrics: async function loadMetrics() {
+      var uuid = this.uuid;
+
+
+      var options = {
+        method: 'GET',
+        url: 'http://localhost:8080/metrics/' + uuid,
+        json: true
+      };
+
+      var metrics = void 0;
+      try {
+        metrics = await request(options);
+      } catch (e) {
+        this.error = e.error.error;
+        return;
+      }
+
+      this.metrics = metrics;
+
+      this.startRealtime();
+    },
+    startRealtime: function startRealtime() {
+      var _this = this;
+
+      var uuid = this.uuid,
+          socket = this.socket;
+
+
+      socket.on('agent/disconnected', function (payload) {
+        console.log('disconnected');
+        if (payload.agent.uuid === uuid) {
+          _this.connected = false;
+        }
+      });
+    },
     toggleMetrics: function toggleMetrics() {
       this.showMetrics = this.showMetrics ? false : true;
     }
@@ -32,7 +95,7 @@ module.exports = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"agent"},[_c('div',[_c('h2',{staticClass:"agent-title"},[_vm._v(_vm._s(_vm.name)+" ("+_vm._s(_vm.pid)+")")]),_vm._v(" "),_c('p',{staticClass:"agent-host"},[_vm._v(_vm._s(_vm.hostname))]),_vm._v(" "),_c('p',{staticClass:"agent-status"},[_vm._v("Connected: "),_c('span',[_vm._v(_vm._s(_vm.connected))])]),_vm._v(" "),_c('button',{staticClass:"button",on:{"click":_vm.toggleMetrics}},[_vm._v("Toggle Metrics")]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showMetrics),expression:"showMetrics"}]},[_c('h3',{staticClass:"metrics-title"},[_vm._v("Metrics")]),_vm._v(" "),_vm._l((_vm.metrics),function(metric){return _c('metric',{key:metric.type,attrs:{"uuid":_vm.uuid,"type":metric.type}})})],2)]),_vm._v(" "),(_vm.error)?_c('p',[_vm._v(_vm._s(_vm.error))]):_vm._e()])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"agent"},[_c('div',[_c('h2',{staticClass:"agent-title"},[_vm._v(_vm._s(_vm.name)+" ("+_vm._s(_vm.pid)+")")]),_vm._v(" "),_c('p',{staticClass:"agent-host"},[_vm._v(_vm._s(_vm.hostname))]),_vm._v(" "),_c('p',{staticClass:"agent-status"},[_vm._v("Connected: "),_c('span',[_vm._v(_vm._s(_vm.connected))])]),_vm._v(" "),_c('button',{staticClass:"button",on:{"click":_vm.toggleMetrics}},[_vm._v("Toggle Metrics")]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showMetrics),expression:"showMetrics"}]},[_c('h3',{staticClass:"metrics-title"},[_vm._v("Metrics")]),_vm._v(" "),_vm._l((_vm.metrics),function(metric){return _c('metric',{key:metric.type,attrs:{"uuid":_vm.uuid,"socket":_vm.socket,"type":metric.type}})})],2)]),_vm._v(" "),(_vm.error)?_c('p',[_vm._v(_vm._s(_vm.error))]):_vm._e()])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -45,7 +108,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-c64f93a4", __vue__options__)
   }
 })()}
-},{"vue":485,"vue-hot-reload-api":484,"vueify/lib/insert-css":486}],2:[function(require,module,exports){
+},{"request-promise-native":381,"vue":485,"vue-hot-reload-api":484,"vueify/lib/insert-css":486}],2:[function(require,module,exports){
 'use strict';
 
 var Vue = require('vue');
@@ -69,10 +132,9 @@ var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("body {\n
 ;(function(){
 'use strict';
 
+var request = require('request-promise-native');
 var io = require('socket.io-client');
 var socket = io();
-console.log('>socket');
-console.log(socket);
 
 module.exports = {
   data: function data() {
@@ -88,14 +150,43 @@ module.exports = {
 
 
   methods: {
-    initialize: function initialize() {}
+    initialize: async function initialize() {
+      var _this = this;
+
+      var options = {
+        method: 'GET',
+        url: 'http://localhost:8080/agents',
+        json: true
+      };
+
+      var result = void 0;
+      try {
+        result = await request(options);
+      } catch (e) {
+        this.error = e.error.error;
+        return;
+      }
+
+      this.agents = result;
+
+      socket.on('agent/connected', function (payload) {
+        var uuid = payload.agent.uuid;
+
+        var alreadyIncluded = _this.agents.find(function (a) {
+          return a.uuid === uuid;
+        });
+        if (!alreadyIncluded) {
+          _this.agents.push(payload.agent);
+        }
+      });
+    }
   }
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('metric',{attrs:{"uuid":"adceab13-21f4-4ff9-9301-85b2c7817720","type":"callbackMetric","socket":_vm.socket}}),_vm._v(" "),_vm._l((_vm.agents),function(agent){return _c('agent',{key:agent.uuid,attrs:{"uuid":agent.uuid}})}),_vm._v(" "),(_vm.error)?_c('p',[_vm._v(_vm._s(_vm.error))]):_vm._e()],2)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.agents),function(agent){return _c('agent',{key:agent.uuid,attrs:{"uuid":agent.uuid,"socket":_vm.socket}})}),_vm._v(" "),(_vm.error)?_c('p',[_vm._v(_vm._s(_vm.error))]):_vm._e()],2)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -108,7 +199,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-c599e0ec", __vue__options__)
   }
 })()}
-},{"socket.io-client":418,"vue":485,"vue-hot-reload-api":484,"vueify/lib/insert-css":486}],4:[function(require,module,exports){
+},{"request-promise-native":381,"socket.io-client":418,"vue":485,"vue-hot-reload-api":484,"vueify/lib/insert-css":486}],4:[function(require,module,exports){
 'use strict';
 
 var _require = require('vue-chartjs'),
@@ -207,7 +298,7 @@ module.exports = {
           socket = this.socket;
 
 
-      socket && socket.on('agent/message', function (payload) {
+      socket.on('agent/message', function (payload) {
         if (payload.agent.uuid === uuid) {
           var metric = payload.metrics.find(function (m) {
             return m.type === type;
