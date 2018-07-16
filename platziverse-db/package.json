@@ -4,7 +4,7 @@
   "description": "A simple IoT Platform - DB Module",
   "main": "index.js",
   "scripts": {
-    "lint": "node_modules/.bin/eslint lib/** models/**",
+    "lint": "standard",
     "setup": "DEBUG=platziverse:* node setup.js",
     "test": "DEBUG=platziverse:* nyc --reporter=lcov ava tests/ --verbose"
   },
@@ -16,7 +16,8 @@
     "nyc": "^11.7.1",
     "proxyquire": "^2.0.1",
     "sinon": "^4.5.0",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^3.1.13",
+    "standard": "^11.0.1"
   },
   "dependencies": {
     "chalk": "^2.3.0",

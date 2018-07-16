@@ -18,10 +18,10 @@ module.exports = async function (config) {
     pool: {
       max: 10,
       min: 0,
-      idle: 10000,
+      idle: 10000
     },
     query: {
-      raw: true,
+      raw: true
     }
   })
 
@@ -45,6 +45,6 @@ module.exports = async function (config) {
 
   return {
     Agent,
-    Metric,
+    Metric
   }
 }

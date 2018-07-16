@@ -52,13 +52,13 @@ test.beforeEach(async () => {
   AgentStub = {
     hasMany: sandbox.spy()
   }
-  
+
   // Model create Stub
   AgentStub.create = sandbox.stub()
   AgentStub.create
     .withArgs(newAgent)
     .returns(Promise.resolve({
-      toJSON() { return newAgent }
+      toJSON () { return newAgent }
     }))
 
   // Model: Add findById stub

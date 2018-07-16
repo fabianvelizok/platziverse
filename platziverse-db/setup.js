@@ -6,9 +6,9 @@ const debug = require('debug')('platziverse:db:setup')
 const inquirer = require('inquirer')
 const common = require('platziverse-common')
 
-async function setup() {
+async function setup () {
   const byPass = process.argv.indexOf('yes') !== -1
-  
+
   if (!byPass) {
     const prompt = inquirer.createPromptModule()
     const answer = await prompt([
@@ -18,7 +18,7 @@ async function setup() {
         message: 'Are you sure to destroy the database?'
       }
     ])
-  
+
     if (!answer.setup) {
       return console.log('Nothing happened.')
     }
@@ -27,9 +27,8 @@ async function setup() {
   const config = Object.assign({}, common.db.config, {
     logging: s => debug(s),
     setup: true,
-    operatorsAliases: false,
+    operatorsAliases: false
   })
-
 
   await db(config).catch(handleFatalError)
   process.exit(0)

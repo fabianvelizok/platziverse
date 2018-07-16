@@ -1,7 +1,7 @@
 'use strict'
 
-module.exports = function setupAgent(MetricModel, AgentModel) {
-  async function findByAgentUuid(uuid) {
+module.exports = function setupAgent (MetricModel, AgentModel) {
+  async function findByAgentUuid (uuid) {
     const q = {
       attributes: ['type'], // Like a select
       group: ['type'],
@@ -33,7 +33,7 @@ module.exports = function setupAgent(MetricModel, AgentModel) {
     return MetricModel.findAll(q)
   }
 
-  async function create(agentUuid, metric) {
+  async function create (agentUuid, metric) {
     const agent = await AgentModel.findOne({
       where: { uuid: agentUuid }
     })

@@ -1,29 +1,29 @@
 'use strict'
 
-module.exports = function setupAgent(AgentModel) {
-  function findById(id) {
+module.exports = function setupAgent (AgentModel) {
+  function findById (id) {
     return AgentModel.findById(id)
   }
 
-  async function createOrUpdate(agent) {
+  async function createOrUpdate (agent) {
     // return AgentModel.createOrUpdate(agent)
     const condition = {
-      where: { uuid : agent.uuid }
+      where: { uuid: agent.uuid }
     }
 
     const savedAgent = await AgentModel.findOne(condition)
 
     if (savedAgent) {
       const updatedAgent = await AgentModel.update(agent, condition)
-      return updatedAgent ?
-        AgentModel.findOne(condition) : savedAgent
+      return updatedAgent
+        ? AgentModel.findOne(condition) : savedAgent
     }
 
     const result = await AgentModel.create(agent)
     return result.toJSON()
   }
 
-  function findByUuid(uuid) {
+  function findByUuid (uuid) {
     return AgentModel.findOne({
       where: {
         uuid
@@ -31,11 +31,11 @@ module.exports = function setupAgent(AgentModel) {
     })
   }
 
-  function findAll() {
+  function findAll () {
     return AgentModel.findAll()
   }
 
-  function findConnected() {
+  function findConnected () {
     return AgentModel.findAll({
       where: {
         connected: true
@@ -43,7 +43,7 @@ module.exports = function setupAgent(AgentModel) {
     })
   }
 
-  function findByUsername(username) {
+  function findByUsername (username) {
     return AgentModel.findAll({
       where: {
         username,
