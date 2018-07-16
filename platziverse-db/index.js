@@ -1,13 +1,16 @@
 'use strict'
 
-const Sequelize = require('sequelize')
-const setupDatabase = require('./lib/db')
-const setupAgentModel = require('./models/agent')
-const setupMetricModel = require('./models/metric')
-const setupAgent = require('./lib/agent')
-const setupMetric = require('./lib/metric')
+if (process.env.NODE_ENV !== 'production') {
+  require('longjohn')
+}
 
 const defaults = require('defaults')
+const setupAgent = require('./lib/agent')
+const setupAgentModel = require('./models/agent')
+const setupDatabase = require('./lib/db')
+const setupMetric = require('./lib/metric')
+const setupMetricModel = require('./models/metric')
+const Sequelize = require('sequelize')
 
 module.exports = async function (config) {
   const Op = Sequelize.Op
