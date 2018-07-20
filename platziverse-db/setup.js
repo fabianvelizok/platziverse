@@ -1,15 +1,17 @@
 'use strict'
 
 const chalk = require('chalk')
-const db = require('./')
+const common = require('platziverse-common')
 const debug = require('debug')('platziverse:db:setup')
 const inquirer = require('inquirer')
-const common = require('platziverse-common')
+const minimist = require('minimist')
+
+const db = require('./')
+
+const args = minimist(process.argv)
 
 async function setup () {
-  const byPass = process.argv.indexOf('yes') !== -1
-
-  if (!byPass) {
+  if (!args.yes) {
     const prompt = inquirer.createPromptModule()
     const answer = await prompt([
       {
