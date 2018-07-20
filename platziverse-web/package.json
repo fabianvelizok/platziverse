@@ -8,7 +8,7 @@
     "prestart": "npm run build",
     "start-dev": "DEBUG=platziverse:* nodemon server.js",
     "prestart-dev": "npm run build",
-    "build": "browserify -t babelify -t vueify client/app.js -o public/bundle.js",
+    "build": "browserify -g envify -t babelify -t vueify client/app.js -o public/bundle.js",
     "lint": "standard"
   },
   "author": "Fabián Veliz <velizfabianhoracio@gmail.com> (https://twitter.com/fabianvelizok)",
@@ -40,6 +40,7 @@
     "chalk": "^2.4.1",
     "chart.js": "^2.6.0",
     "debug": "^3.1.0",
+    "envify": "^4.1.0",
     "express": "^4.16.3",
     "express-asyncify": "^1.0.0",
     "moment": "^2.22.2",
